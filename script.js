@@ -1056,7 +1056,7 @@ const BOOT_LINES = [
 
 // ✏️ TEXTY K ÚPRAVĚ — hlášky, když zapírá věk:
 const DENY_MSGS = [
-    "CHYBA 40: Rodný list tvrdí něco jiného.",
+    "CHYBA 40(4): Rodný list tvrdí něco jiného.",
     "Detekován zvuk vrzajících kolen. Zkus to znovu.",
     "I ježci z Wacky Wheels vědí, že ti je 40.",
     "Don Salieri ti vzkazuje, ať mluvíš pravdu.",

@@ -24,12 +24,8 @@ python -m http.server 8000
 | `index.html` | kostra stránky: uvítací obrazovka, HUD, canvas, d-pad, dialog na heslo |
 | `styles.css` | DOS/CRT vzhled — modrá paleta, scanlines, font VT323 (Google Fonts) |
 | `script.js` | veškerá logika: levely, sprity, herní smyčka, zvuky, ovládání, hesla |
-| `assets/40let.mp3` | samotný dárek ke stažení |
-| `assets/darek-data.js` | *volitelné* — dárek zabalený v base64 jako `window.DAREK_B64` |
+| `assets/vsenej.mp3` | samotný dárek ke stažení |
 
-Soubor `assets/darek-data.js` v repozitáři není. Bez něj web funguje normálně (dárek se
-stahuje ze `assets/40let.mp3`); přidat ho má smysl jen tehdy, když se stránka bude otevírat
-přímo z disku přes `file://`, kde `fetch` neprojde.
 
 ## Jak se to hraje
 
