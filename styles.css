@@ -1,0 +1,428 @@
+/* ===== VLAK 40 — DOS/CRT vzhled ===== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --dos-blue: #0000aa;
+    --dos-lblue: #5555ff;
+    --dos-cyan: #55ffff;
+    --dos-yellow: #ffff55;
+    --dos-white: #ffffff;
+    --dos-gray: #aaaaaa;
+    --dos-red: #ff5555;
+    --dos-green: #55ff55;
+    --crt-bg: #0a0a12;
+}
+
+html {
+    background: var(--crt-bg);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'VT323', 'Courier New', monospace;
+    color: var(--dos-gray);
+    background:
+        radial-gradient(ellipse at center, #14142a 0%, var(--crt-bg) 75%);
+    padding: 1rem 1rem 3rem;
+    text-align: center;
+}
+
+/* ===== uvítací obrazovka (fake DOS boot) ===== */
+
+#welcome {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--dos-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    transition: opacity 0.6s, visibility 0.6s;
+}
+
+#welcome.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#welcome-box {
+    width: 100%;
+    max-width: 760px;
+    border: 3px double var(--dos-cyan);
+    padding: clamp(1rem, 4vw, 2.5rem);
+    text-align: left;
+}
+
+#boot-lines {
+    font-family: inherit;
+    color: var(--dos-white);
+    font-size: clamp(1rem, 3.4vw, 1.5rem);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    min-height: 12em;
+}
+
+#boot-lines .ok { color: var(--dos-green); }
+
+#welcome-question {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+#welcome-question .q-title {
+    color: var(--dos-yellow);
+    font-size: clamp(1.15rem, 3.8vw, 1.6rem);
+    margin-bottom: 1.2rem;
+}
+
+#welcome-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#welcome-buttons button {
+    font-family: inherit;
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    border: 3px solid var(--dos-white);
+    transition: transform 0.25s;
+}
+
+#btn-deny {
+    background: var(--dos-blue);
+    color: var(--dos-white);
+}
+
+#btn-accept {
+    background: var(--dos-yellow);
+    color: #000;
+    box-shadow: 0 0 18px rgba(255, 255, 85, 0.5);
+}
+
+#btn-accept:hover {
+    background: var(--dos-white);
+}
+
+#deny-msg {
+    margin-top: 1.1rem;
+    color: var(--dos-red);
+    font-size: clamp(1.05rem, 3.4vw, 1.4rem);
+    min-height: 1.5em;
+}
+
+#boot-skip {
+    margin-top: 1rem;
+    color: var(--dos-lblue);
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* ===== hlavička ===== */
+
+header h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: var(--dos-cyan);
+    text-shadow: 0 0 12px rgba(85, 255, 255, 0.55), 3px 3px 0 var(--dos-blue);
+    letter-spacing: 0.05em;
+    animation: flicker 4s infinite;
+}
+
+header h1 .forty {
+    color: var(--dos-yellow);
+    text-shadow: 0 0 14px rgba(255, 255, 85, 0.6), 3px 3px 0 #aa5500;
+}
+
+.subtitle {
+    color: var(--dos-yellow);
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    margin: 0.2rem 0 1rem;
+}
+
+@keyframes flicker {
+    0%, 92%, 96%, 100% { opacity: 1; }
+    94% { opacity: 0.75; }
+}
+
+/* ===== HUD + herní obrazovka (co největší) ===== */
+
+main {
+    width: 100%;
+    max-width: min(1160px, 97vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#hud {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: var(--dos-blue);
+    color: var(--dos-white);
+    font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+    padding: 0.3rem 1rem;
+    border: 2px solid var(--dos-lblue);
+    border-bottom: none;
+}
+
+#hud #hud-cargo { color: var(--dos-yellow); }
+
+#screen-wrap {
+    position: relative;
+    width: 100%;
+    border: 2px solid var(--dos-lblue);
+    box-shadow: 0 0 40px rgba(85, 85, 255, 0.3), inset 0 0 40px rgba(0, 0, 0, 0.6);
+    background: #000;
+    line-height: 0;
+}
+
+/* CRT scanlines */
+#screen-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 2px,
+        rgba(0, 0, 0, 0.18) 3px
+    );
+}
+
+canvas {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    touch-action: none;
+}
+
+/* ===== dárek na výherní obrazovce ===== */
+
+#win-gift {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 63%;
+    transform: translate(-50%, -50%);
+    background: rgba(5, 5, 20, 0.92);
+    border: 3px solid var(--dos-yellow);
+    box-shadow: 0 0 30px rgba(255, 255, 85, 0.4);
+    padding: clamp(1rem, 3vw, 2rem) clamp(1.2rem, 4vw, 3rem);
+    line-height: 1.4;
+    animation: unlock-pop 0.6s ease-out;
+}
+
+#win-gift p {
+    color: var(--dos-white);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    margin-bottom: 0.8rem;
+}
+
+@keyframes unlock-pop {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.08); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.gift-button {
+    display: inline-block;
+    font-size: clamp(1.15rem, 4vw, 1.6rem);
+    color: #000;
+    background: var(--dos-yellow);
+    text-decoration: none;
+    padding: 0.45rem 1.3rem;
+    border: 3px solid var(--dos-white);
+    box-shadow: 0 0 20px rgba(255, 255, 85, 0.5);
+    animation: gift-pulse 1.2s infinite alternate;
+}
+
+.gift-button:hover {
+    background: var(--dos-white);
+}
+
+@keyframes gift-pulse {
+    from { box-shadow: 0 0 10px rgba(255, 255, 85, 0.35); }
+    to   { box-shadow: 0 0 26px rgba(255, 255, 85, 0.75); }
+}
+
+/* ===== d-pad (jen dotyková zařízení) ===== */
+
+#dpad {
+    display: none;
+    margin-top: 1rem;
+    grid-template-columns: repeat(3, 68px);
+    grid-template-rows: repeat(2, 68px);
+    gap: 6px;
+}
+
+@media (pointer: coarse) {
+    #dpad { display: grid; }
+}
+
+#dpad button {
+    font-family: inherit;
+    font-size: 1.7rem;
+    color: var(--dos-cyan);
+    background: #111126;
+    border: 2px solid var(--dos-lblue);
+    border-radius: 8px;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#dpad button:active {
+    background: var(--dos-blue);
+    color: var(--dos-white);
+}
+
+#dpad button[data-dir="up"]      { grid-column: 2; grid-row: 1; }
+#dpad button[data-dir="left"]    { grid-column: 1; grid-row: 2; }
+#dpad button[data-dir="right"]   { grid-column: 3; grid-row: 2; }
+#dpad button[data-dir="down"]    { grid-column: 2; grid-row: 2; }
+#dpad button[data-action="shoot"] {
+    grid-column: 3;
+    grid-row: 1;
+    border-color: var(--dos-red);
+    border-radius: 50%;
+}
+
+/* ===== nápověda + patička ===== */
+
+#controls-hint {
+    margin-top: 1rem;
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--dos-gray);
+    line-height: 1.55;
+}
+
+#controls-hint kbd {
+    font-family: inherit;
+    color: var(--dos-white);
+    background: #1a1a33;
+    border: 1px solid var(--dos-lblue);
+    border-radius: 4px;
+    padding: 0 0.35em;
+}
+
+/* ===== tajné heslo ===== */
+
+#btn-pass {
+    margin-top: 1rem;
+    font-family: inherit;
+    font-size: 1.15rem;
+    color: var(--dos-cyan);
+    background: #111126;
+    border: 2px solid var(--dos-lblue);
+    padding: 0.35rem 1rem;
+    cursor: pointer;
+}
+
+#btn-pass:hover {
+    background: var(--dos-blue);
+    color: var(--dos-white);
+}
+
+#pass-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+#pass-dialog[hidden] {
+    display: none;
+}
+
+#pass-box {
+    width: 100%;
+    max-width: 560px;
+    background: var(--dos-blue);
+    border: 3px double var(--dos-cyan);
+    padding: clamp(1.2rem, 4vw, 2rem);
+}
+
+#pass-box .q-title {
+    color: var(--dos-yellow);
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    margin-bottom: 1rem;
+}
+
+#pass-input {
+    width: 100%;
+    font-family: inherit;
+    font-size: clamp(1.1rem, 3.8vw, 1.5rem);
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--dos-white);
+    background: #000;
+    border: 2px solid var(--dos-lblue);
+    padding: 0.4rem 0.6rem;
+    outline: none;
+}
+
+#pass-input:focus {
+    border-color: var(--dos-cyan);
+}
+
+#pass-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.1rem;
+}
+
+#pass-buttons button {
+    font-family: inherit;
+    font-size: clamp(1.05rem, 3.4vw, 1.35rem);
+    padding: 0.35rem 1.1rem;
+    cursor: pointer;
+    border: 3px solid var(--dos-white);
+}
+
+#pass-ok {
+    background: var(--dos-yellow);
+    color: #000;
+}
+
+#pass-ok:hover {
+    background: var(--dos-white);
+}
+
+#pass-cancel {
+    background: var(--dos-blue);
+    color: var(--dos-white);
+}
+
+#pass-error {
+    margin-top: 1rem;
+    color: var(--dos-red);
+    font-size: clamp(1.05rem, 3.4vw, 1.35rem);
+    min-height: 1.4em;
+}
+
+footer {
+    margin-top: 2.5rem;
+    font-size: 1rem;
+    color: #666680;
+}

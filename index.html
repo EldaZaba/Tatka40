@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLAK 40 — Vše nej, tati!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ===== uvítací obrazovka (fake DOS boot) ===== -->
+    <div id="welcome">
+        <div id="welcome-box">
+            <pre id="boot-lines"></pre>
+            <div id="welcome-question" hidden>
+                <p class="q-title">Než tě pustíme na trať, potvrď věk strojvedoucího:</p>
+                <div id="welcome-buttons">
+                    <button id="btn-deny">Ještě mi NENÍ 40 😇</button>
+                    <button id="btn-accept">Dobře, je mi 40 🎂</button>
+                </div>
+                <p id="deny-msg"></p>
+            </div>
+            <p id="boot-skip">(ťukni kamkoliv pro přeskočení)</p>
+        </div>
+    </div>
+
+    <header>
+        <h1>V&nbsp;L&nbsp;A&nbsp;K&nbsp;&nbsp;<span class="forty">40</span></h1>
+        <p class="subtitle">★ Speciální narozeninová jízda ★</p>
+    </header>
+
+    <main>
+        <div id="hud">
+            <span id="hud-level">LEVEL 1/6</span>
+            <span id="hud-cargo">NÁKLAD 0/0</span>
+            <span id="hud-tries">JÍZDA Č. 1</span>
+        </div>
+
+        <div id="screen-wrap">
+            <canvas id="game" width="480" height="288"></canvas>
+
+            <!-- dárek — objeví se na obrazovce po dohrání -->
+            <div id="win-gift" hidden>
+                <p>🎁 Tvůj dárek, tati:</p>
+                <a id="gift-link" class="gift-button" href="assets/40let.mp3" download="40let.mp3">⬇ STÁHNOUT DÁREK ⬇</a>
+            </div>
+        </div>
+
+        <div id="dpad" aria-hidden="true">
+            <button data-dir="up">▲</button>
+            <button data-dir="left">◀</button>
+            <button data-dir="right">▶</button>
+            <button data-dir="down">▼</button>
+            <button data-action="shoot">🦔</button>
+        </div>
+
+        <p id="controls-hint">
+            Ovládání: <kbd>šipky</kbd> nebo <kbd>WASD</kbd> · <kbd>mezerník</kbd> = výstřel ježkem 🦔<br>
+            Na mobilu přejeď prstem po obrazovce, ťuknutím střílíš.<br>
+        </p>
+
+        <button id="btn-pass">🔑 TAJNÉ HESLO</button>
+
+        <!-- dialog pro zadání tajného hesla -->
+        <div id="pass-dialog" hidden>
+            <div id="pass-box">
+                <p class="q-title">ZADEJ TAJNÉ HESLO:</p>
+                <input id="pass-input" type="text" autocomplete="off" spellcheck="false" placeholder="???">
+                <div id="pass-buttons">
+                    <button id="pass-ok">POTVRDIT</button>
+                    <button id="pass-cancel">ZRUŠIT</button>
+                </div>
+                <p id="pass-error"></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Vyrobeno s láskou ke 40. narozeninám ❤</p>
+    </footer>
+
+    <script src="assets/darek-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
